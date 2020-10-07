@@ -1,0 +1,63 @@
+<mvc:View
+        xmlns:core="sap.ui.core"
+        xmlns:mvc="sap.ui.core.mvc"
+        xmlns:l="sap.ui.layout"
+        xmlns:unified="sap.ui.unified"
+        xmlns:sem="sap.m.semantic"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="sap.m"
+        controllerName="ZTVBH.controller.SaleIncomeMaster">
+    <Page showHeader="false" showFooter="true">
+        <content>
+            <l:FixFlex minFlexSize="100px" class="fixFlexVertical">
+                <l:fixContent>
+                    <VBox justifyContent="SpaceBetween" class="sapUiMarginBeginEnd" alignContent="Center">
+                        <HBox class="sapUiTinyMarginBeginEnd" width="100%" wrap="NoWrap" justifyContent="SpaceAround">
+                            <items>
+                                <VBox width="{= ${device>/system/phone} ? '100%' : '300px' }">
+                                    <Label class="sapUiTinyMarginTop" text="{i18n>LBL_FROM_DATE}"/>
+                                    <DatePicker change="_doDateFilter" id="__fromDate" placeholder="{i18n>fromDate}"
+                                                width="90%" displayFormat="dd/MM/yyyy"/>
+                                </VBox>
+                                <VBox width="{= ${device>/system/phone} ? '100%' : '300px' }">
+                                    <Label class="sapUiTinyMarginTop" text="{i18n>LBL_TO_DATE}"/>
+                                    <DatePicker change="_doDateFilter" id="__toDate" placeholder="{i18n>toDate}"
+                                                width="90%" displayFormat="dd/MM/yyyy"/>
+                                </VBox>
+                            </items>
+                        </HBox>
+                        <HBox alignItems="Center" alignContent="Center" fitContainer="true" height="30px"
+                              justifyContent="{= ${device>isPhone ? 'Center' : 'Start' }}">
+                            <items>
+                                <Text design="Bold" class="sapUiTinyMarginBeginEnd"
+                                      text="{i18n>SALE_INCOME_TOTAL_AMOUNT}:"/>
+                                <unified:Currency
+                                        design="Bold"
+                                        currency=""
+                                        value=""
+                                        maxPrecision="0"
+                                        id="txtTotalAmount"/>
+                            </items>
+                        </HBox>
+                    </VBox>
+                </l:fixContent>
+                <l:flexContent>
+                    <VBox>
+                        <List
+                                id="_listSaleIncome"
+                                includeItemInSelection="true"
+                                mode="SingleSelectMaster"
+                                noDataText="{i18n>ORDER_SALE_INCOME_NO_DATA}"
+                                itemPress="navToOrders">
+                            <!--<PullToRefresh id="_refresh" refresh="refresh"/>-->
+                            <ObjectListItem type="Active" id="SaleIncomeMaster"
+                                            title="{ path: 'Audat', type: 'sap.ui.model.type.Date',  formatOptions: { pattern: 'dd/MM/yyyy' }}"
+                                            numberUnit="{Waerk}"
+                                            number="{ parts:[ {path:'Netwr'}, {path:'Waerk'} ], type:'sap.ui.model.type.Currency', formatOptions:{ showMeasure: false }}"/>
+                        </List>
+                    </VBox>
+                </l:flexContent>
+            </l:FixFlex>
+        </content>
+    </Page>
+</mvc:View>

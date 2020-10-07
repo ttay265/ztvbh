@@ -1,0 +1,132 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:core="sap.ui.core"
+          controllerName="ZTVBH.controller.Customer">
+    <Page showHeader="false">
+        <content>
+            <l:FixFlex minFlexSize="100px" class="fixFlexVertical">
+                <l:fixContent>
+                    <Panel class="panelProductNoPadding" backgroundDesign="Translucent" headerText="">
+                        <HBox alignItems="Center" justifyContent="SpaceAround" wrap="WrapReverse"
+                              width="100%">
+                            <SearchField
+                                    showRefreshButton="false"
+                                    placeholder="{i18n>LBL_CUSTOMER_SEARCH}"
+                                    search="onCustomerSuggest"
+                                    id="inpSearch"
+                                    width="300px"/>
+                            <Button icon="sap-icon://add-contact"
+                                    width="300px" text="{i18n>LBL_CREATE_CUSTOMER}"
+                                    press="onAddCustomerPress"/>
+                        </HBox>
+                    </Panel>
+                    <Table class="tblProductNoPadding" mode="None"
+                           visible="{= ${CustomerSet>/results} ? true : false }"
+                           showNoData="false"
+                           inset="{= !${device>/system/phone} }">
+                        <columns>
+                            <Column visible="{= ${CustomerSet>/results} &amp;&amp; ${CustomerSet>/results}.length === 0 ? false : true }">
+                                <header>
+                                    <Label visible="false" design="Bold" text="{i18n>LBL_CUSTOMER_NAME}"/>
+                                </header>
+                            </Column>
+                            <Column width="120px" visible="{= ${CustomerSet>/results} &amp;&amp; ${CustomerSet>/results}.length === 0 ? false : true }">
+                                <header>
+                                    <Label visible="false" design="Bold" text="{i18n>LBL_CUSTOMER_ID}"/>
+                                </header>
+                            </Column>
+                            <Column visible="{= ${CustomerSet>/results} &amp;&amp; ${CustomerSet>/results}.length === 0 ? false : true }"
+                                    width="120px" hAlign="End" demandPopin="true" popinDisplay="Inline"
+                                    minScreenWidth="desktop">
+                                <header>
+                                    <Label visible="false" design="Bold" text="{i18n>LBL_MOBILE}"/>
+                                </header>
+                            </Column>
+                            <Column visible="{= ${CustomerSet>/results} &amp;&amp; ${CustomerSet>/results}.length === 0 ? false : true }"
+                                    popinDisplay="WithoutHeader" width="150px" hAlign="Center"
+                                    demandPopin="true"
+                                    minScreenWidth="desktop">
+                                <header>
+                                    <Label visible="false" design="Bold" text="{i18n>LBL_CSLAB}"/>
+                                </header>
+                            </Column>
+                            <Column visible="{= ${CustomerSet>/results} &amp;&amp; ${CustomerSet>/results}.length === 0 ? false : true }"
+                                    popinDisplay="Inline" demandPopin="true" minScreenWidth="2560px">
+                                <header>
+                                    <Label visible="false" design="Bold" text="{i18n>LBL_ADDRESS}"/>
+                                </header>
+                            </Column>
+                        </columns>
+                    </Table>
+                </l:fixContent>
+                <l:flexContent>
+                    <Table mode="None"
+                           inset="{= !${device>/system/phone} }"
+                           noDataText="{= ${CustomerSet>/results} ? ${i18n>CUSTOMER_NO_DATA} : ${i18n>LBL_CUSTOMER_SEARCH} }"
+                           class="tblProductNoPadding"
+                           growing="true"
+                           growingDirection="Downwards"
+                           growingStarted="onTblCustomerGrowStarted"
+                           growingThreshold="10"
+                           growingScrollToLoad="true"
+                           id="_tblCustomerSet" items="{CustomerSet>/results}">
+                        <columns>
+                            <Column visible="{= ${CustomerSet>/results} &amp;&amp; ${CustomerSet>/results}.length === 0 ? false : true }">
+                                <header>
+                                    <Label visible="false" design="Bold" text="{i18n>LBL_CUSTOMER_NAME}"/>
+                                </header>
+                            </Column>
+                            <Column visible="{= ${CustomerSet>/results} &amp;&amp; ${CustomerSet>/results}.length === 0 ? false : true }"
+                                    width="120px" hAlign="End" demandPopin="true" popinDisplay="Inline"
+                                    minScreenWidth="desktop">
+                                <header>
+                                    <Label visible="{= ${device>/system/desktop} ? false : true}" design="Bold" text="{i18n>LBL_CUSTOMER_ID}"/>
+                                </header>
+                            </Column>
+                            <Column visible="{= ${CustomerSet>/results} &amp;&amp; ${CustomerSet>/results}.length === 0 ? false : true }"
+                                    width="120px" hAlign="End" demandPopin="true" popinDisplay="Inline"
+                                    minScreenWidth="desktop">
+                                <header>
+                                    <Label visible="{= ${device>/system/desktop} ? false : true}" design="Bold" text="{i18n>LBL_MOBILE}"/>
+                                </header>
+                            </Column>
+                            <Column visible="{= ${CustomerSet>/results} &amp;&amp; ${CustomerSet>/results}.length === 0 ? false : true }"
+                                    popinDisplay="WithoutHeader" width="150px" hAlign="Center"
+                                    demandPopin="true"
+                                    minScreenWidth="desktop">
+                                <header>
+                                    <Label visible="{= ${device>/system/desktop} ? false : true}" design="Bold" text="{i18n>LBL_CSLAB}"/>
+                                </header>
+                            </Column>
+                            <Column visible="{= ${CustomerSet>/results} &amp;&amp; ${CustomerSet>/results}.length === 0 ? false : true }"
+                                    popinDisplay="Inline" demandPopin="true" minScreenWidth="2560px">
+                                <header>
+                                    <Label visible="true" design="Bold" text="{i18n>LBL_ADDRESS}"/>
+                                </header>
+                            </Column>
+                        </columns>
+                        <items>
+                            <!--<ColumnListItem vAlign="Middle" type="Detail" detailPress="onRowSelected">-->
+                                <!--<cells>-->
+                                    <!--<Text text="{CustomerSet>LastName} {CustomerSet>MiddleName} {CustomerSet>FirstName}"/>-->
+                                    <!--<Text text="{CustomerSet>Id}"/>-->
+                                    <!--<Text text="{CustomerSet>MobilePhone}"/>-->
+                                    <!--<Text text="{CustomerSet>Cslab}"/>-->
+                                    <!--<Text maxLines="2" text="{path:'CustomerSet>Address', formatter:'.formatter.AddressText' }"/>-->
+                                    <!--<Text visible="false" text="{CustomerSet>Id}"/>-->
+                                <!--</cells>-->
+                            <!--</ColumnListItem>-->
+                            <FeedListItem counter="0"
+                                          tap="onRowSelected"
+                                          type="Navigation"
+                                          icon="sap-icon://customer-briefing"
+                                          sender="{CustomerSet>LastName} {CustomerSet>MiddleName} {CustomerSet>FirstName}"
+                                          text="{CustomerSet>MobilePhone} / {CustomerSet>Cslab}"
+                                          info="{i18n>LBL_ADDRESS}: {path:'CustomerSet>Address', formatter:'.formatter.AddressText' }"
+                                          timestamp="{ path: 'CustomerSet>BirthDate', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'dd/MM/yyyy' }}"
+                                          maxCharacters="0"/>
+                        </items>
+                    </Table>
+                </l:flexContent>
+            </l:FixFlex>
+        </content>
+    </Page>
+</mvc:View>

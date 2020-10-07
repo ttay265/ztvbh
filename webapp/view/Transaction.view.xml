@@ -1,0 +1,281 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc"
+          xmlns:core="sap.ui.core"
+          xmlns:l="sap.ui.layout"
+          xmlns:u="sap.ui.unified"
+          xmlns:f="sap.ui.layout.form"
+          xmlns="sap.m"
+          controllerName="ZTVBH.controller.Transaction">
+    <Page backgroundDesign="Standard"
+          showFooter="true"
+          showNavButton="false"
+          showHeader="false"
+          navButtonPress="back"
+          floatingFooter="false">
+        <content>
+            <Toolbar design="Solid">
+                <!--<Title class="sapUiSmallMarginBegin"-->
+                       <!--text="{i18n>LBL_CUSTOMER_PANEL}"/>-->
+                <Button icon="sap-icon://nav-back"
+                        type="Transparent"
+                        text="Quay lại"
+                        press="back"/>
+                <ToolbarSpacer/>
+                <Button icon="sap-icon://customer-briefing"
+                        text="{i18n>LBL_CHOOSE_CUSTOMER}"
+                        type="Transparent"
+                        press="onAddCustomerPress"/>
+            </Toolbar>
+            <HBox justifyContent="Center">
+                <Text visible="{= !${CartProperties>/CustomerId} ? true : false }"
+                      text="{i18n>CUSTOMER_NO_DATA}"/>
+            </HBox>
+            <ObjectHeader class="sapUiResponsiveMargin"
+                          visible="{= ${CartProperties>/CustomerId} ? true : false }"
+                          id="_objectCustomer"
+                          title="{CartProperties>/CustomerName}"
+                          responsive="true">
+                <attributes>
+                    <ObjectAttribute
+                            title="{i18n>LBL_CUSTOMER_ID}"
+                            text="{CartProperties>/CustomerId}"/>
+                </attributes>
+                <statuses>
+                    <ObjectStatus
+                            title="{i18n>LBL_CSLAB}"
+                            text="{CartProperties>/Cslab}"
+                            state="Warning"/>
+                </statuses>
+                <attributes>
+                    <ObjectAttribute class="Object_Att_No_Overflow"
+                                     title="{i18n>LBL_ADDRESS}"
+                                     text="{CartProperties>/Address/fullAdd}"/>
+                    <ObjectAttribute
+                            title="{i18n>LBL_MOBILE}"
+                            text="{CartProperties>/Mobile}"/>
+                </attributes>
+            </ObjectHeader>
+            <f:Form id="FormToolbar"
+                    editable="true"
+                    ariaLabelledBy="Title1">
+                <f:layout>
+                    <f:ResponsiveGridLayout
+                            labelSpanXL="4"
+                            labelSpanL="3"
+                            labelSpanM="3"
+                            labelSpanS="12"
+                            adjustLabelSpan="false"
+                            emptySpanXL="0"
+                            emptySpanL="3"
+                            emptySpanM="2"
+                            emptySpanS="0"
+                            columnsXL="2"
+                            columnsL="1"
+                            columnsM="1"
+                            singleContainerFullSize="false"/>
+                </f:layout>
+                <f:formContainers>
+                    <f:FormContainer ariaLabelledBy="Title2">
+                        <f:formElements>
+                            <f:FormElement label="{i18n>LBL_SO_TYPE}">
+                                <f:fields>
+                                    <ComboBox selectedKey="{CartProperties>/TransactionType}">
+                                        <items>
+                                            <core:Item
+                                                    key="SALE"
+                                                    text="{i18n>LBL_ORDER_TYPE_SALE}"/>
+                                            <core:Item key="ORDER" text="{i18n>LBL_ORDER_TYPE_ORDER}"/>
+                                        </items>
+                                        <layoutData>
+                                            <l:GridData span="XL2 L5 M6 S12"/>
+                                        </layoutData>
+                                    </ComboBox>
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement forceSelection="false" label="{i18n>LBL_SHIPPING_METHOD}">
+                                <f:fields>
+                                    <Select width="100%" id="_selectShipMethod"
+                                            selectedKey="{CartProperties>/ShippingMethod}">
+                                        <items>
+                                            <core:Item text="In-Store" key="In-Store"/>
+                                            <core:Item text="TH-Express" key="TH-Express"/>
+                                        </items>
+                                        <layoutData>
+                                            <l:GridData span="XL2 L5 M6 S12"/>
+                                        </layoutData>
+                                    </Select>
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement label="{i18n>LBL_DELIVERY_DATE_TIME}">
+                                <f:fields>
+                                    <DateTimePicker placeholder="{i18n>LBL_DELIVERY_DATE_TIME}" change=""
+                                                    id="_dpDeliveryDateTime"
+                                                    displayFormat="dd/MM/yyyy HH:mm:ss"
+                                                    valueFormat="dd/MM/yyyy HH:mm:ss"
+                                                    value="{CartProperties>/ShipDateTime}">
+                                        <layoutData>
+                                            <l:GridData span="XL2 L5 M6 S12"/>
+                                        </layoutData>
+                                    </DateTimePicker>
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement label="{i18n>LBL_DELIVERY_ADDRESS}">
+                                <f:fields>
+                                    <Select enabled="{= ${CartProperties>/CustomerId} ? true : false }"
+                                            id="_cbDeliveryAddress" forceSelection="false"
+                                            items="{CartProperties>/ShippingAddresses}">
+                                        <items>
+                                            <core:Item key="{CartProperties>key}"
+                                                       text="{CartProperties>address/fullAdd}"/>
+                                        </items>
+                                        <layoutData>
+                                            <l:GridData span="XL2 L5 M6 S10"/>
+                                        </layoutData>
+                                    </Select>
+                                </f:fields>
+                                <Button press="_openAddressDialog"
+                                        enabled="{= ${CartProperties>/CustomerId} ? true : false }"
+                                        id="btn_shippingAddress"
+                                        icon="sap-icon://add"
+                                        text="{i18n>}"
+                                        type="Transparent">
+                                    <layoutData>
+                                        <l:GridData span="XL2 L1 M1 S2"/>
+                                    </layoutData>
+                                </Button>
+                            </f:FormElement>
+                            <f:FormElement label="{i18n>LBL_DELIVERY_NOTES}">
+                                <f:fields>
+                                    <TextArea id="_txtDeliveryNotes" maxLength="100" value="{CartProperties>/DeliveryNotes}">
+                                        <layoutData>
+                                            <l:GridData span="XL2 L5 M6 S12"/>
+                                        </layoutData>
+                                    </TextArea>
+                                </f:fields>
+                            </f:FormElement>
+                        </f:formElements>
+                    </f:FormContainer>
+                </f:formContainers>
+            </f:Form>
+            <Table inset="{= !${device>/system/phone} }"
+                   id="_tblCartItems" headerText=""
+                   mode="Delete"
+                   items="{CartProperties>/CartItems}"
+                   delete="onDelete" noDataText="{i18n>LBL_NO_CART_ITEMS}">
+                <headerToolbar>
+                    <Toolbar class="sapUiTinyMarginEnd" design="Transparent" width="100%">
+                        <Title text="{i18n>LBL_ITEMS_PANEL}"/>
+                        <ToolbarSpacer/>
+                        <Button type="Transparent" iconFirst="true" icon="sap-icon://add" text="{i18n>LBL_ADD_ITEM}"
+                                press="onAddProductPressed"/>
+                    </Toolbar>
+                </headerToolbar>
+                <columns>
+                    <Column vAlign="Middle">
+                        <header>
+                            <Label text="{i18n>PRODUCT_SUPPLIER_PRODUCT_TEXT}"/>
+                        </header>
+                    </Column>
+                    <Column vAlign="Middle" hAlign="End" popinDisplay="Inline" demandPopin="true"
+                            minScreenWidth="desktop">
+                        <header>
+                            <Label text="{i18n>PRODUCT_UNIT_PRICE_ATTRIBUTE_TEXT}"/>
+                        </header>
+                    </Column>
+                    <Column vAlign="Middle" hAlign="Center" class="Table_Quantity_Attribute" popinDisplay="Inline"
+                            demandPopin="true"
+                            minScreenWidth="760px">
+                        <header>
+                            <Label text="{i18n>PRODUCT_QUANTITY_ATTRIBUTE_TEXT}"/>
+                        </header>
+                    </Column>
+                    <Column vAlign="Middle" hAlign="End">
+                        <header>
+                            <Label text="{i18n>PRODUCT_AMOUNT_ATTRIBUTE_TEXT}"/>
+                        </header>
+                    </Column>
+                    <Column
+                            demandPopin="true" popinDisplay="WithoutHeader" minScreenWidth="9999px" vAlign="Middle"
+                            hAlign="End">
+                        <header>
+                        </header>
+                    </Column>
+                </columns>
+                <!--<items>-->
+                    <!--<ColumnListItem press="cartItemPress" type="Active" vAlign="Middle">-->
+                        <!--<cells>-->
+                            <!--<ObjectIdentifier title="{CartProperties>ProductName}"-->
+                                              <!--text="{CartProperties>Brand}"/>-->
+                            <!--<u:Currency maxPrecision="0" value="{= parseFloat(${CartProperties>UnitPrice})  }"-->
+                                        <!--currency="{CartProperties>CurrencyCode}"/>-->
+                            <!--<StepInput-->
+                                    <!--change="onQuantityChange" width="130px" value="{CartProperties>Quantity}" min="1"-->
+                                    <!--step="1" id="_stepQuantity"-->
+                                    <!--max="{= ${CartProperties>/TransactionType} === 'SALE' ? parseInt(${CartProperties>SelectedBatch/Quantity}, 10) : 99999 }"/>-->
+                            <!--<u:Currency maxPrecision="0"-->
+                                        <!--value="{= parseFloat(${CartProperties>UnitPrice}) * parseFloat(${CartProperties>Quantity}) }"-->
+                                        <!--currency="{CartProperties>CurrencyCode}"/>-->
+                            <!--<HBox>-->
+                                <!--<items>-->
+                                    <!--<MessageStrip-->
+                                            <!--type="Error"-->
+                                            <!--visible="{= ${CartProperties>/TransactionType} === 'SALE' &amp;&amp; ${CartProperties>SelectedBatch/Quantity} &lt;= 0  ? true : false }"-->
+                                            <!--text="{i18n>LOI_TON_KHO}"/>-->
+                                    <!--<MessageStripz-->
+                                            <!--type="Error"-->
+                                            <!--visible="{= ${CartProperties>/TransactionType} === 'SALE' &amp;&amp; ${CartProperties>SelectedBatch/Quantity} &gt; 0 &amp;&amp; (${CartProperties>ShippingMethod} === 'In-Store' || (${CartProperties>ShippingMethod} === '' &amp;&amp; ${CartProperties>/ShippingMethod} === 'In-Store')) &amp;&amp; !${CartProperties>Sloc} ? true : false }"-->
+                                            <!--text="{i18n>CHUA_CHON_SLOC}"/>-->
+                                <!--</items>-->
+                            <!--</HBox>-->
+                        <!--</cells>-->
+                    <!--</ColumnListItem>-->
+                <!--</items>-->
+                <items>
+                    <ColumnListItem press="cartItemPress" type="Active" vAlign="Middle">
+                        <cells>
+                            <ObjectIdentifier title="{CartProperties>ProductName}"
+                                              text="{CartProperties>Brand}"/>
+                            <u:Currency maxPrecision="0" value="{= parseFloat(${CartProperties>UnitPrice})  }"
+                                        currency="{CartProperties>CurrencyCode}"/>
+                            <StepInput
+                                    change="onQuantityChange" width="130px" value="{CartProperties>Quantity}" min="1"
+                                    step="1" id="_stepQuantity"
+                                    max="{= ${CartProperties>/TransactionType} === 'SALE' ? parseInt(${CartProperties>SelectedBatch/Quantity}, 10) : 99999 }"/>
+                            <u:Currency maxPrecision="0"
+                                        value="{= parseFloat(${CartProperties>UnitPrice}) * parseFloat(${CartProperties>Quantity}) }"
+                                        currency="{CartProperties>CurrencyCode}"/>
+                            <HBox>
+                                <items>
+                                    <MessageStrip
+                                            type="Error"
+                                            visible="{= ${CartProperties>/TransactionType} === 'SALE' &amp;&amp; ${CartProperties>SelectedBatch/Quantity} &lt;= 0  ? true : false }"
+                                            text="{i18n>LOI_TON_KHO}"/>
+                                    <MessageStrip
+                                            type="Error"
+                                            visible="{= ${CartProperties>/TransactionType} === 'SALE' &amp;&amp; ${CartProperties>SelectedBatch/Quantity} &gt; 0 &amp;&amp; (${CartProperties>ShippingMethod} === 'In-Store' || (${CartProperties>ShippingMethod} === '' &amp;&amp; ${CartProperties>/ShippingMethod} === 'In-Store')) &amp;&amp; !${CartProperties>Sloc} ? true : false }"
+                                            text="{i18n>CHUA_CHON_SLOC}"/>
+                                </items>
+                            </HBox>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+        <!--<footer>-->
+        <HBox width="100%" justifyContent="SpaceBetween">
+            <Button width="{ = ${device>/system/phone} ? '49%' : 'auto' }"
+                    id="btnCancel"
+                    press="clearCartData"
+                    icon="sap-icon://refresh"
+                    text="{i18n>LBL_CLEAR_DATA}"/>
+
+            <Button width="{ = ${device>/system/phone} ? '49%' : 'auto' }"
+                    text="{i18n>BTN_CHECKOUT}"
+                    id="btnOK"
+                    enabled="{= ${CartProperties>/CustomerId} !== '' &amp;&amp; ${CartProperties>/TotalQuantity} > 0 }"
+                    press="onCheckOutPressed"
+                    icon="sap-icon://lead"
+                    type=""/>
+        </HBox>
+        <!--</footer>-->
+    </Page>
+</mvc:View>

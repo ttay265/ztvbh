@@ -1,0 +1,69 @@
+<mvc:View
+        xmlns:core="sap.ui.core"
+        xmlns:mvc="sap.ui.core.mvc"
+        xmlns:unified="sap.ui.unified"
+        xmlns:sem="sap.m.semantic"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="sap.m"
+        controllerName="ZTVBH.controller.SaleIncome">
+    <Page id="__page0"
+          title="{page>/title}" showNavButton="true" navButtonPress="back"
+          showFooter="false">
+        <Toolbar>
+            <HBox alignItems="Center" alignContent="Center" fitContainer="true" height="30px" justifyContent="{= ${device>isPhone ? 'Center' : 'Start' }}">
+                <items>
+                    <Text design="Bold" class="sapUiTinyMarginBeginEnd" text="{i18n>SALE_INCOME_TOTAL_AMOUNT}:"/>
+                    <unified:Currency
+                            design="Bold"
+                            currency=""
+                            value=""
+                            maxPrecision="0"
+                            id="txtTotalAmount"/>
+                </items>
+            </HBox>
+        </Toolbar>
+        <content>
+            <Table id="_listSaleIncome"
+                   includeItemInSelection="true"
+                   mode="SingleSelectMaster"
+                   growingScrollToLoad="true"
+                   items="{path: '/SaleIncomeSet', length: '20' }"
+                   noDataText="{i18n>ORDER_SALE_INCOME_NO_DATA}"
+                   itemPress="_saleIncomeItemPress">
+                <columns>
+                    <Column>
+                        <Label text="{i18n>SALE_INCOME_SO}"/>
+                    </Column>
+                    <Column demandPopin="true" minScreenWidth="Phone" popinDisplay="WithoutHeader">
+                        <Label text="{i18n>SALE_INCOME_CUSTOMER_NAME}"/>
+                    </Column>
+                    <Column demandPopin="true" hAlign="Center" popinDisplay="WithoutHeader" minScreenWidth="tablet">
+                        <Label text="{i18n>SALE_INCOME_TOTAL_AMOUNT}"/>
+                    </Column>
+                    <Column demandPopin="true" hAlign="Center" popinDisplay="WithoutHeader" minScreenWidth="tablet">
+                        <Label text="{i18n>SALE_INCOME_DELIVERY_STATUS}"/>
+                    </Column>
+                    <Column demandPopin="true" visible="true" hAlign="Center" popinDisplay="WithoutHeader" minScreenWidth="tablet">
+                        <Label text="Order Type"/>
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem type="Active" id="SaleIncomeSet">
+                        <cells>
+                            <Text text="{Vbeln}"/>
+                            <Title id="HD" text="{Name1}"/>
+                            <unified:Currency
+                                    class="sapUiTinyMarginBeginEnd"
+                                    currency="{Waerk}"
+                                    value="{=${Auart} === 'ZRE1' || ${Auart} === 'ZRE2' ? -parseInt(${Netwr}) : parseInt(${Netwr}) }"
+                                    maxPrecision="0"/>
+                            <ObjectStatus text="{DlvStatusDescription}"
+                                          state="{path:'DlvStatus', formatter:'.formatter.DeliveryStatusState'}"/>
+                            <Text text="{Auart}"/>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+    </Page>
+</mvc:View>

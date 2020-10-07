@@ -1,0 +1,156 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns="sap.m"
+                         xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form" displayBlock="true">
+    <Dialog id="AddressDialog" stretch="{device>/system/phone}" title="{i18n>TITLE_POST_ADD_ITEM}">
+        <buttons>
+            <Button class="closebtn" text="{i18n>cancel}" press="_cartItemDialogClose" type="Reject"/>
+            <Button id="btn_cartItemDialogSubmit" text="{i18n>Ok}" press="_cartItemDialogSubmit" type="Accept"
+            />
+        </buttons>
+        <content>
+            <ObjectHeader responsive="true" condensed="true" title="{CartItem>/ProductName}"/>
+            <f:Form>
+                <f:layout>
+                    <f:ResponsiveGridLayout
+                            labelSpanXL="4"
+                            labelSpanL="3"
+                            labelSpanM="12"
+                            labelSpanS="12"
+                            adjustLabelSpan="false"
+                            emptySpanXL="0"
+                            emptySpanL="4"
+                            emptySpanM="0"
+                            emptySpanS="0"
+                            columnsXL="2"
+                            columnsL="1"
+                            columnsM="1"
+                            singleContainerFullSize="false"/>
+                </f:layout>
+                <f:formContainers>
+                    <f:FormContainer>
+                        <f:formElements>
+                            <f:FormElement forceSelection="false">
+                                <f:fields>
+                                    <HBox justifyContent="SpaceBetween"
+                                          wrap="{= ${device>/system/phone} ? 'Wrap' : 'NoWrap' }" width="100%">
+                                        <VBox width="{= ${device>/system/phone} ? '100%' : '150px' }">
+                                            <items>
+                                                <Label text="{i18n>LBL_SHIPPING_METHOD}:"/>
+                                                <Select width="{= ${device>/system/phone} ? '100%' : '150px' }"
+                                                        id="_selectLineShipMethod"
+                                                        selectedKey="{CartItem>/ShippingMethod}">
+                                                    <items>
+                                                        <core:Item text="" key=""/>
+                                                        <core:Item text="In-Store" key="In-Store"/>
+                                                        <core:Item text="TH-Express" key="TH-Express"/>
+                                                    </items>
+                                                </Select>
+                                            </items>
+                                            <layoutData>
+                                                <l:GridData span="XL2 L5 M6 S12"/>
+                                            </layoutData>
+                                        </VBox>
+                                        <VBox width="{= ${device>/system/phone} ? '100%' : 'auto' }">
+                                            <items>
+                                                <Label text="{i18n>LBL_DELIVERY_DATE_TIME}:"/>
+                                                <DateTimePicker width="{= ${device>/system/phone} ? '100%' : 'auto' }"
+                                                                placeholder="{i18n>LBL_DELIVERY_DATE_TIME}"
+                                                                id="_dpLineDeliveryDateTime"
+                                                                valueFormat="dd/MM/yyyy HH:mm:ss"
+                                                                displayFormat="dd/MM/yyyy HH:mm:ss"
+                                                                value="{CartItem>/ShipDateTime}"/>
+                                            </items>
+                                            <layoutData>
+                                                <l:GridData span="XL2 L5 M6 S12"/>
+                                            </layoutData>
+                                        </VBox>
+                                    </HBox>
+                                </f:fields>
+                                <f:layoutData>
+                                    <l:GridData span="XL2 L5 M12 S6"/>
+                                </f:layoutData>
+                            </f:FormElement>
+                            <f:FormElement>
+                                <f:fields>
+                                    <VBox width="100%">
+                                        <items>
+                                            <Label text="{i18n>LBL_DELIVERY_ADDRESS}"/>
+                                            <Select enabled="{= ${CartProperties>/CustomerId} ? true : false }"
+                                                    width="100%" id="_cbLineDeliveryAddress"
+                                                    selectedKey="{CartItem>/ShippingAddresses/Key}"
+                                                    items="{CartProperties>/ShippingAddresses}">
+                                                <items>
+                                                    <core:Item key="{CartProperties>key}"
+                                                               text="{CartProperties>address/fullAdd}"/>
+                                                </items>
+                                            </Select>
+                                        </items>
+                                    </VBox>
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement>
+                                <f:fields>
+                                    <VBox width="100%">
+                                        <items>
+                                            <Label text="{i18n>LBL_DELIVERY_NOTES}"/>
+                                            <TextArea width="100%" id="_txtLineDeliveryNotes" maxLength="100"
+                                                      value="{CartItem>/DeliveryNotes}"/>
+                                        </items>
+                                    </VBox>
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement>
+                                <f:fields>
+                                    <HBox justifyContent="SpaceBetween"
+                                          wrap="{= ${device>/system/phone} ? 'Wrap' : 'NoWrap' }" width="100%">
+                                        <VBox width="{= ${device>/system/phone} ? '100%' : 'auto' }">
+                                            <Label text="{i18n>LBL_DELIVERY_SITE}"/>
+                                            <Select width="{= ${device>/system/phone} || ${CartProperties>/TransactionType} === 'ORDER' ? 'auto' : 'auto' }"
+                                                    id="_selectLineDeliverySite"
+                                                    selectedKey="{= ${CartItem>/DeliverySite}}"
+                                                    change="onSelectSiteChanged"
+                                                    items="{path:'/SiteSet', filters: {path:'Werks', operator: 'NE', value1: '4410' }}"
+                                                    forceSelection="true">
+                                                <core:Item key="{Werks}" text="{Description}"/>
+                                            </Select>
+                                        </VBox>
+                                        <VBox visible="{= ${CartProperties>/TransactionType} === 'SALE' }"
+                                              width="{= ${device>/system/phone} ? '100%' : 'auto' }">
+                                            <items>
+                                                <Label id="lbl_batch_cartitem"
+                                                       required="{= ${CartProperties>/TransactionType} === 'SALE' }"
+                                                       text="{i18n>PRODUCT_BATCH_ATTRIBUTE_TEXT}"/>
+                                                <ComboBox width="{= ${device>/system/phone} ? '100%' : 'auto' }"
+                                                          id="_selectStock"
+                                                          change="onBatchChange"
+                                                          valueState="{= ${CartItem>/SelectedBatch/Quantity} > 0 ? 'None' : 'Error' }"
+                                                          valueStateText="{= ${CartProperties>/TransactionType} === 'SALE' &amp;&amp; (${CartItem>/SelectedBatch} || ${CartItem>/SelectedBatch/Quantity} &lt;= 0 )  ? ${i18n>CHUA_CHON_LO} : '' }"
+                                                          items="{path: 'toStock', templateShareable:false}">
+                                                    <core:Item key="{Batch}{PosSloc}" text="{Batch} > {SLocName}"/>
+                                                </ComboBox>
+                                            </items>
+                                        </VBox>
+                                    </HBox>
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement
+                                    visible="false">
+                                <f:fields>
+                                    <l:VerticalLayout width="100%">
+                                        <Label required="true"
+                                                id="lbl_sloc_cartitem" text="{i18n>LBL_DELIVERY_SLOC}"/>
+                                        <Select width="100%" id="_selectLineDeliverySLoc" enabled="false"
+                                                selectedKey="{CartItem>/DeliverySLoc}"
+                                                items="{/StorageLocationSet}"
+                                                forceSelection="true">
+                                            <core:Item key="{PosSloc}" text="{Description}"/>
+                                        </Select>
+                                    </l:VerticalLayout>
+                                </f:fields>
+                            </f:FormElement>
+                        </f:formElements>
+                    </f:FormContainer>
+                </f:formContainers>
+            </f:Form>
+        </content>
+    </Dialog>
+</core:FragmentDefinition>
