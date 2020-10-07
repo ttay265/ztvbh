@@ -62,6 +62,21 @@ sap.ui.define([
         },
         setTimeout: function (oEvent) {
             // console.log(oEvent);
+        },
+        createContent: function () {
+            var r = UIComponent.prototype.createContent.apply(this, arguments);
+            // r.addStyleClass(this.getContentDensityClass());
+            r.addStyleClass("sapUiSizeCozy");
+            return r;
+        }, getContentDensityClass: function () {
+            if (!this._sContentDensityClass) {
+                if (Device.system.desktop) {
+                    this._sContentDensityClass = "sapUiSizeCompact";
+                } else {
+                    this._sContentDensityClass = "sapUiSizeCozy";
+                }
+            }
+            return this._sContentDensityClass;
         }
     });
 

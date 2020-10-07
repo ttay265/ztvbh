@@ -1,48 +1,29 @@
-<mvc:View
-        xmlns:u="sap.ui.unified"
-        xmlns:f="sap.ui.layout.form"
-        xmlns:l="sap.ui.layout"
-        xmlns:mvc="sap.ui.core.mvc"
-        xmlns="sap.m"
-        xmlns:core="sap.ui.core"
-        controllerName="ZTVBH.controller.Product">
-    <Page showHeader="false"
-          class="customBackground">
+<mvc:View xmlns:u="sap.ui.unified"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:l="sap.ui.layout"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core" controllerName="ZTVBH.controller.Product">
+    <Page showHeader="false" class="customBackground">
         <content>
             <l:FixFlex minFlexSize="100px" class="fixFlexVertical">
                 <l:fixContent>
                     <Panel class="panelProductNoPadding" headerText="{i18n>LBL_SEARCH_PRODUCT}">
-                        <HBox alignItems="Center" justifyContent="SpaceAround" wrap="WrapReverse"
-                              width="100%">
-                            <SearchField
-                                    maxLength="34"
-                                    id="_txtSearch"
-                                    placeholder="{i18n>LBL_INPUT_ARTICLE_CODE_OR_DESCRIPTION}"
-                                    width="300px"
-                                    value="{productFilter>/Search}"
-                                    search="onProductSearch"
-                                    selectOnFocus="true"
-                                    enableSuggestions="false">
+                        <HBox alignItems="Center" justifyContent="SpaceAround" wrap="WrapReverse" width="100%">
+                            <SearchField maxLength="34" id="_txtSearch" placeholder="{i18n>LBL_INPUT_ARTICLE_CODE_OR_DESCRIPTION}" width="300px" value="{productFilter>/Search}" search="onProductSearch" selectOnFocus="true" enableSuggestions="false">
                             </SearchField>
                             <HBox width="300px" alignItems="Center" justifyContent="SpaceBetween">
                                 <Label text="{i18n>navSortByNganh}:"/>
                                 <ToolbarSpacer/>
-                                <Select maxWidth="300px" width="200px" forceSelection="true"
-                                        selectedKey="{productFilter>/Mtart}"
-                                        items="{/ArticletypeSet}" change="onProductSearch">
+                                <Select maxWidth="300px" width="200px" forceSelection="true" selectedKey="{productFilter>/Mtart}" items="{/ArticletypeSet}" change="onProductSearch">
                                     <core:Item text="{Mtbez}" key="{Mtart}"/>
                                 </Select>
                             </HBox>
                         </HBox>
                     </Panel>
-                    <Table class="tblProductNoPadding" mode="None"
-                           inset="{= !${device>/system/phone} }"
-                           noDataText="{i18n>PRODUCT_NO_DATA}"
-                           showNoData="false">
+                    <!-- <Table class="tblProductNoPadding" mode="None" inset="{= !${device>/system/phone} }" noDataText="{i18n>PRODUCT_NO_DATA}" showNoData="false">
                         <columns>
-                            <Column vAlign="Middle" width="110px" demandPopin="true" popinDisplay="Inline"
-                                    minScreenWidth="tablet"
-                                    hAlign="Left">
+                            <Column vAlign="Middle" width="110px" demandPopin="true" popinDisplay="Inline" minScreenWidth="tablet" hAlign="Left">
                                 <header>
                                     <Label design="Bold" text="{i18n>PRODUCT_CODE}"/>
                                 </header>
@@ -52,38 +33,25 @@
                                     <Label text="{i18n>PRODUCT_SUPPLIER_PRODUCT_TEXT}"/>
                                 </header>
                             </Column>
-                            <Column vAlign="Middle" width="150px" hAlign="End" demandPopin="true" popinDisplay="Inline"
-                                    minScreenWidth="tablet">
+                            <Column vAlign="Middle" width="150px" hAlign="End" demandPopin="true" popinDisplay="Inline" minScreenWidth="tablet">
                                 <header>
                                     <Label text="{i18n>PRODUCT_PRICE_ATTRIBUTE_TEXT}"/>
                                 </header>
                             </Column>
-                            <Column vAlign="Middle" width="50px" hAlign="End" demandPopin="true" popinDisplay="Inline"
-                                    minScreenWidth="tablet">
+                            <Column vAlign="Middle" width="50px" hAlign="End" demandPopin="true" popinDisplay="Inline" minScreenWidth="tablet">
                                 <header>
                                     <Label text=""/>
                                 </header>
                             </Column>
                         </columns>
-                    </Table>
+                    </Table> -->
                 </l:fixContent>
                 <l:flexContent>
-                    <Table mode="None"
-                           inset="{= !${device>/system/phone} }"
-                           id="_tblProduct"
-                           growing="true"
-                           growingThreshold="10"
-                           growingScrollToLoad="true"
-                           class="tblProductNoPadding"
-                           items="{path: 'productResult>/results', length: 20}"
-                           noDataText="{= ${productFilter>/Search} &amp;&amp; ${productResult>/results} ? ${i18n>PRODUCT_NO_DATA} : ${i18n>LBL_INPUT_ARTICLE_CODE_OR_DESCRIPTION}}">
+                    <Table mode="None" inset="{= !${device>/system/phone} }" id="_tblProduct" growing="true" growingThreshold="10" growingScrollToLoad="true" class="tblProductNoPadding" items="{path: 'productResult>/results', length: 20}" noDataText="{= ${productFilter>/Search} &amp;&amp; ${productResult>/results} ? ${i18n>PRODUCT_NO_DATA} : ${i18n>LBL_INPUT_ARTICLE_CODE_OR_DESCRIPTION}}">
                         <columns>
-                            <Column vAlign="Middle" width="110px" demandPopin="true" popinDisplay="Inline"
-                                    minScreenWidth="tablet"
-                                    hAlign="Left">
+                            <Column vAlign="Middle" width="110px" demandPopin="true" popinDisplay="Inline" minScreenWidth="tablet" hAlign="Left">
                                 <header>
-                                    <Label visible="{= ${device>/system/tablet} ? false : true}" design="Bold"
-                                           text="{i18n>PRODUCT_CODE}"/>
+                                    <Label visible="{= ${device>/system/tablet} ? false : true}" design="Bold" text="{i18n>PRODUCT_CODE}"/>
                                 </header>
                             </Column>
                             <Column vAlign="Middle">
@@ -91,27 +59,18 @@
                                     <Label visible="false" text="{i18n>PRODUCT_SUPPLIER_PRODUCT_TEXT}"/>
                                 </header>
                             </Column>
-                            <Column vAlign="Middle" width="150px" hAlign="End" demandPopin="true" popinDisplay="Inline"
-                                    minScreenWidth="tablet">
+                            <Column vAlign="Middle" width="150px" hAlign="End" demandPopin="true" popinDisplay="Inline" minScreenWidth="tablet">
                                 <header>
-                                    <Label visible="{= ${device>/system/tablet} ? false : true}"
-                                           text="{i18n>PRODUCT_PRICE_ATTRIBUTE_TEXT}"/>
+                                    <Label visible="{= ${device>/system/tablet} ? false : true}" text="{i18n>PRODUCT_PRICE_ATTRIBUTE_TEXT}"/>
                                 </header>
                             </Column>
                         </columns>
                         <items>
                             <ColumnListItem vAlign="Middle" type="Navigation" press="_navToProdDetail">
                                 <cells>
-                                    <Text
-                                            class="sapMTableContentMargin"
-                                            text="{productResult>Matnr}"/>
-                                    <ObjectIdentifier title="{productResult>Maktx}"
-                                                      class="sapMTableContentMargin"
-                                                      text="{productResult>Brand}"/>
-                                    <u:Currency value="{= parseFloat(${productResult>Endpr})}" maxPrecision="1"
-                                                useSymbol="true"
-                                                class="sapMTableContentMargin"
-                                                currency="{productResult>Waers}"/>
+                                    <Text class="sapMTableContentMargin" text="{productResult>Matnr}"/>
+                                    <ObjectIdentifier title="{productResult>Maktx}" class="sapMTableContentMargin" text="{productResult>Brand}"/>
+                                    <u:Currency value="{= parseFloat(${productResult>Endpr})}" maxPrecision="1" useSymbol="true" class="sapMTableContentMargin" currency="{productResult>Waers}"/>
                                 </cells>
                             </ColumnListItem>
                         </items>

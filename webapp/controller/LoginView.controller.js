@@ -21,7 +21,7 @@ sap.ui.define([
             this.getRouter().getRoute("login").attachPatternMatched(this.onAfterRendering, this);
             this.txtUsername = this.getView().byId("_txtUsername");
             this.txtPassword = this.getView().byId("_txtPassword");
-            this.getRememberedLogonInfo();
+            // this.getRememberedLogonInfo();
         },
         getRememberedLogonInfo: function () {
             jQuery.sap.require("jquery.sap.storage");
@@ -71,15 +71,16 @@ sap.ui.define([
             //     success: onSucccess,
             //     error: onError
             // });
-            onSucccess({
+            var odata = {
                 ReturnValue: 'X',
                 Pernr: 10001,
-                Ename: 'Nguyễn Văn Trang',
+                Ename: 'Nguyễn Văn A',
                 AssignedSite: '1001',
                 SiteDesc: 'Cửa hàng Quận 1',
                 Status: 'Online',
                 token: 'm12983m1hvr96724g3r9t23hr9723uer209e23rh2485h3mv0378th345876t'
-            });
+            };
+            setTimeout(that.processLoginResult(odata, password), 6000);
         },
         processLoginResult: function (odata, password) {
             var msg = "";
